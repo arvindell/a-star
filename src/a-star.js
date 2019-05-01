@@ -97,8 +97,6 @@ export default class AStar {
     if (grid[x][y + 1]) {
       children.push(grid[x][y + 1]);
     }
-    console.log("children");
-    console.log(children);
     return children;
   }
 }

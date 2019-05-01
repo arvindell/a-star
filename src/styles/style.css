@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,400,500,700|Ropa+Sans");
+
+.app {
+  border-radius: 3px;
+}
+
+
+
+p {
+    font-size: 22px;
+    font-family: 'Roboto', sans-serif;
+}
+button {
+    color: white;
+    font-family: "Roboto", sans-serif;
+    background-color: rgb(45, 85, 214);
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button:hover {
+    filter: brightness(110%);
+    box-shadow: 0 5px 7px 0 rgba(45, 85, 214, 0.20);
+    transition: 0.3s;
+}
+
+
+
+.playground {
+  
+}
+
+.tile {
+    border-color: gray;
+    border-radius: 10%;
+    border-style: solid;
+    border-width: 1px;
+    height: 30px;
+    width: 30px;
+    margin: 0.5px;
+}
+
+.tile:hover {
+    border-color: black;
+    transition: 0.1s;
+}
