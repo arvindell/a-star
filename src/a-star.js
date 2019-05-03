@@ -2,6 +2,8 @@ import Heuristics from "./heuristics";
 
 export default class AStar {
   search(grid, start, target, heuristic) {
+    let search = [];
+
     // Crear objetos nodos a partir de arreglo
     let nodes = [];
     for (let x = 0; x < grid.length; x++) {
@@ -45,7 +47,9 @@ export default class AStar {
           path.push(node);
           node = node.parent;
         }
-        return path.reverse();
+
+        return { search, path: path.reverse() };
+        //return path.reverse();
       }
 
       openList.remove(lowestCostIndex);
@@ -64,6 +68,7 @@ export default class AStar {
           child.h = heuristic(child, targetNode);
           child.visited = true;
           openList.push(child);
+          search.push(child);
         }
         child.parent = currentNode;
         child.g = currentNode.g + 1;

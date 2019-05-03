@@ -2,6 +2,10 @@ import AStar from "./a-star";
 const aStar = new AStar();
 
 const backgroundFill = "#f1f1f1";
+const visitedColor = "lightblue";
+const targetColor = "gold";
+const startColor = "green";
+const pathColor = "rgb(45, 85, 214)";
 
 let grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -16,10 +20,8 @@ let grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-
-let start = { x: 8, y: 14 };
+let start = { x: 3, y: 5 };
 let target = { x: 0, y: 0 };
-
 
 let addObstacle = (x, y) => {
   clearPath();
@@ -64,35 +66,35 @@ grid.forEach((row, rowIndex) => {
   });
 });
 
-paintStartAndTarget();
-document.getElementById("start-btn").onclick = () => {
-  clearPath();
-  paintPath();
-};
-
-document.getElementById("delete-obstacles-btn").onclick = () => {
-  clearObstacles();
-};
 
 // START
-function paintPath() {
-  let path = aStar.search(grid, start, target, true);
-  console.log(path);
+function paintSearch() {
+  let result = aStar.search(grid, start, target, true);
+  let { search, path } = result;
+  console.log(search);
 
-  if (path.length == 0) {
+  if (search.length == 0) {
     alert("No se encontró una ruta");
     return;
   }
   let paintTile = () => {
-    if (path.length != 1) {
-      tiles[path[0].x][path[0].y].style.backgroundColor = "lightblue";
+    if (search.length != 1) {
+      tiles[search[0].x][search[0].y].style.backgroundColor = visitedColor;
     }
-    path.shift();
-    if (path.length == 0) {
+    search.shift();
+    if (search.length == 0) {
       clearInterval(intervalId);
+      paintPath(path);
     }
   };
-  let intervalId = setInterval(paintTile, 100);
+  let intervalId = setInterval(paintTile, 50);
+}
+
+function paintPath(path) {
+  path.forEach(element => {
+    tiles[element.x][element.y].style.backgroundColor = pathColor;
+  });
+  tiles[target.x][target.y].style.backgroundColor = targetColor;
 }
 
 function selectNewStart() {
@@ -101,7 +103,7 @@ function selectNewStart() {
   forAllTiles(tile => {
     tile.onmousedown = () => {
       console.log("New start tile selected");
-      tile.style.backgroundColor = "green";
+      tile.style.backgroundColor = startColor;
       start.x = tile.x;
       start.y = tile.y;
 
@@ -116,7 +118,7 @@ function selectNewTarget() {
   forAllTiles(tile => {
     tile.onmousedown = () => {
       console.log("New target tile selected");
-      tile.style.backgroundColor = "gold";
+      tile.style.backgroundColor = targetColor;
       target.x = tile.x;
       target.y = tile.y;
 
@@ -134,13 +136,16 @@ function addTileBehavior() {
 }
 
 function paintStartAndTarget() {
-  tiles[start.x][start.y].style.backgroundColor = "green";
-  tiles[target.x][target.y].style.backgroundColor = "gold";
+  tiles[start.x][start.y].style.backgroundColor = startColor;
+  tiles[target.x][target.y].style.backgroundColor = targetColor;
 }
 
 function clearPath() {
   forAllTiles(tile => {
-    if (tile.style.backgroundColor == "lightblue") {
+    if (
+      tile.style.backgroundColor == visitedColor ||
+      tile.style.backgroundColor == pathColor
+    ) {
       tile.style.backgroundColor = backgroundFill;
     }
   });
@@ -170,4 +175,20 @@ function forAllTiles(callback) {
   });
 }
 
+
+
+
+
+paintStartAndTarget();
+document.getElementById("start-btn").onclick = () => {
+  clearPath();
+  paintSearch();
+};
+
+document.getElementById("delete-obstacles-btn").onclick = () => {
+  clearObstacles();
+};
+
+
 addTileBehavior();
+
