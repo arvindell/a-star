@@ -48,6 +48,7 @@ button:hover {
 }
 
 .tile {
+  display: flex;
   border-color: rgb(172, 172, 172);
   border-style: solid;
   border-width: 1px;
@@ -60,4 +61,9 @@ button:hover {
 .tile:hover {
   border-color: rgb(63, 63, 63);
   transition: 0.1s;
+}
+
+.innerText {
+  font-size: 9px;
+  margin: auto;
 }

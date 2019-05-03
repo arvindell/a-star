@@ -4,4 +4,9 @@ export default class Heuristics {
     let d2 = Math.abs(node2.y - node1.y);
     return d1 + d2;
   }
+
+  static euclidean(node1, node2) {
+    return Math.pow(node1.x - node2.x, 2) + Math.pow(node1.y - node2.y, 2);
+  }
+
 }

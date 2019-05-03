@@ -10,7 +10,7 @@ const pathColor = "cornflowerblue";
 let grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -21,7 +21,7 @@ let grid = [
 ];
 
 let start = { x: 3, y: 5 };
-let target = { x: 0, y: 0 };
+let target = { x: 4, y: 3 };
 
 let addObstacle = (x, y) => {
   clearPath();
@@ -70,7 +70,6 @@ grid.forEach((row, rowIndex) => {
 function paintSearch() {
   let result = aStar.search(grid, start, target, true);
   let { search, path } = result;
-  console.log(search);
 
   if (search.length == 0) {
     alert("No se encontró una ruta");
@@ -79,11 +78,15 @@ function paintSearch() {
   let paintSearchTile = () => {
     let nextTile = tiles[search[0].x][search[0].y];
     // si no es el nodo target o el inicial, píntalo
-    if (nextTile != tiles[target.x][target.y] && nextTile != tiles[start.x][start.y]) {
+    if (
+      nextTile != tiles[target.x][target.y] &&
+      nextTile != tiles[start.x][start.y]
+    ) {
       nextTile.style.backgroundColor = visitedColor;
     }
     search.shift();
-    if (search.length == 0) { // detener interval
+    if (search.length == 0) {
+      // detener interval
       clearInterval(intervalId);
       paintPath(path);
     }
@@ -95,7 +98,13 @@ function paintPath(path) {
   path.pop(); // para no pintar el target
   path.forEach(element => {
     tiles[element.x][element.y].style.backgroundColor = pathColor;
+    let text = document.createElement("p");
+    text.className = "innerText";
+    text.innerHTML =
+      "g:" + element.g + "<br/> f: " + element.f + "<br/> h: " + element.h;
+    tiles[element.x][element.y].appendChild(text);
   });
+  console.log(path);
 }
 
 function selectNewStart() {
@@ -149,6 +158,7 @@ function clearPath() {
     ) {
       tile.style.backgroundColor = backgroundFill;
     }
+    tile.innerHTML = "";
   });
 }
 

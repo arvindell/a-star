@@ -39,6 +39,9 @@ export default class AStar {
       }
       let currentNode = openList[lowestCostIndex];
 
+      openList.remove(lowestCostIndex);
+      currentNode.closed = true;
+
       // El resultado se ha encontrado
       if (currentNode === targetNode) {
         let node = currentNode;
@@ -47,13 +50,8 @@ export default class AStar {
           path.push(node);
           node = node.parent;
         }
-
         return { search, path: path.reverse() };
       }
-
-      openList.remove(lowestCostIndex);
-      currentNode.closed = true;
-      search.push(currentNode);
 
       let children = this.getChildren(nodes, currentNode);
       children.forEach(child => {
@@ -62,45 +60,88 @@ export default class AStar {
           return;
         }
 
-        // si el hijo está en la lista open
+        var gScore =
+          currentNode.g + (this.isDiagonal(child, currentNode) ? 2 : 1);
+        var gIsBetter = false;
+
         if (!child.visited) {
-          //  La primera vez que se visita el nodo
-          child.h = heuristic(child, targetNode);
           child.visited = true;
+          gIsBetter = true;
+          child.h = heuristic(child, targetNode);
           openList.push(child);
+          search.push(child);
+        } else if (gScore < child.g) {
+          gIsBetter = true;
         }
-        child.parent = currentNode;
-        child.g = currentNode.g + 1;
-        child.f = child.g + child.h;
+
+        if (gIsBetter) {
+          child.parent = currentNode;
+          child.g = gScore;
+          child.f = child.g + child.h;
+        }
       });
     }
     console.log("No se encontró una ruta");
     return [];
   }
 
+  isDiagonal(tile1, tile2) {
+    return tile1.x != tile2.x && tile1.y != tile2.y;
+  }
+
   getChildren(grid, node) {
     let children = [];
     let { x, y } = node;
+    let child;
 
-    // arriba
-    if (grid[x - 1] && grid[x - 1][y]) {
-      children.push(grid[x - 1][y]);
+    // norte
+    child = grid[x - 1];
+    if (child && child[y]) {
+      children.push(child[y]);
     }
 
-    // abajo
-    if (grid[x + 1] && grid[x + 1][y]) {
-      children.push(grid[x + 1][y]);
+    // este
+    child = grid[x];
+    if (child && child[y - 1]) {
+      children.push(child[y - 1]);
     }
 
-    // izquierda
-    if (grid[x][y - 1]) {
-      children.push(grid[x][y - 1]);
+    // sur
+    child = grid[x + 1];
+    if (child && child[y]) {
+      children.push(child[y]);
     }
 
-    // derecha
-    if (grid[x][y + 1]) {
-      children.push(grid[x][y + 1]);
+    // oeste
+    child = grid[x];
+    if (child && child[y + 1]) {
+      children.push(child[y + 1]);
     }
+
+    // noreste
+    child = grid[x - 1];
+    if (child && child[y + 1]) {
+      children.push(child[y + 1]);
+    }
+
+    // noroeste
+    child = grid[x - 1];
+    if (child && child[y - 1]) {
+      children.push(child[y - 1]);
+    }
+
+    // sureste
+    child = grid[x + 1];
+    if (child && child[y + 1]) {
+      children.push(child[y + 1]);
+    }
+
+    // suroeste
+    child = grid[x + 1];
+    if (child && child[y - 1]) {
+      children.push(child[y - 1]);
+    }
+
     return children;
   }
 }
