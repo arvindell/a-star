@@ -5,19 +5,19 @@ const backgroundFill = "#f1f1f1";
 const visitedColor = "lightblue";
 const targetColor = "gold";
 const startColor = "green";
-const pathColor = "rgb(45, 85, 214)";
+const pathColor = "cornflowerblue";
 
 let grid = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 let start = { x: 3, y: 5 };
@@ -66,7 +66,6 @@ grid.forEach((row, rowIndex) => {
   });
 });
 
-
 // START
 function paintSearch() {
   let result = aStar.search(grid, start, target, true);
@@ -77,24 +76,26 @@ function paintSearch() {
     alert("No se encontró una ruta");
     return;
   }
-  let paintTile = () => {
-    if (search.length != 1) {
-      tiles[search[0].x][search[0].y].style.backgroundColor = visitedColor;
+  let paintSearchTile = () => {
+    let nextTile = tiles[search[0].x][search[0].y];
+    // si no es el nodo target o el inicial, píntalo
+    if (nextTile != tiles[target.x][target.y] && nextTile != tiles[start.x][start.y]) {
+      nextTile.style.backgroundColor = visitedColor;
     }
     search.shift();
-    if (search.length == 0) {
+    if (search.length == 0) { // detener interval
       clearInterval(intervalId);
       paintPath(path);
     }
   };
-  let intervalId = setInterval(paintTile, 50);
+  let intervalId = setInterval(paintSearchTile, 50);
 }
 
 function paintPath(path) {
+  path.pop(); // para no pintar el target
   path.forEach(element => {
     tiles[element.x][element.y].style.backgroundColor = pathColor;
   });
-  tiles[target.x][target.y].style.backgroundColor = targetColor;
 }
 
 function selectNewStart() {
@@ -175,10 +176,6 @@ function forAllTiles(callback) {
   });
 }
 
-
-
-
-
 paintStartAndTarget();
 document.getElementById("start-btn").onclick = () => {
   clearPath();
@@ -189,6 +186,4 @@ document.getElementById("delete-obstacles-btn").onclick = () => {
   clearObstacles();
 };
 
-
 addTileBehavior();
-

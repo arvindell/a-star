@@ -49,11 +49,11 @@ export default class AStar {
         }
 
         return { search, path: path.reverse() };
-        //return path.reverse();
       }
 
       openList.remove(lowestCostIndex);
       currentNode.closed = true;
+      search.push(currentNode);
 
       let children = this.getChildren(nodes, currentNode);
       children.forEach(child => {
@@ -68,7 +68,6 @@ export default class AStar {
           child.h = heuristic(child, targetNode);
           child.visited = true;
           openList.push(child);
-          search.push(child);
         }
         child.parent = currentNode;
         child.g = currentNode.g + 1;
