@@ -1,6 +1,7 @@
 import AStar from "./a-star";
 const aStar = new AStar();
 
+const backgroundFill = "#f1f1f1";
 
 let grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -16,10 +17,16 @@ let grid = [
 ];
 
 let addObstacle = (x, y) => {
-  grid[x][y] = 1;
-  elements[x][y].style.backgroundColor = "gray";
+  if (grid[x][y] == 1) {
+    grid[x][y] = 0;
+    tiles[x][y].style.backgroundColor = backgroundFill;
+  } else {
+    grid[x][y] = 1;
+    tiles[x][y].style.backgroundColor = "gray";
+  }
 };
 
+// TODO: reconsider
 let mouseDown = false;
 document.body.onmousedown = function() {
   mouseDown = true;
@@ -28,12 +35,11 @@ document.body.onmouseup = function() {
   mouseDown = false;
 };
 
-
 // Grid creation
-let elements = [];
+let tiles = [];
 grid.forEach((row, rowIndex) => {
   let thisRow = [];
-  elements.push(thisRow);
+  tiles.push(thisRow);
   let rowElement = document.createElement("div");
   rowElement.style.display = "flex";
   document.getElementById("playground").appendChild(rowElement);
@@ -44,23 +50,16 @@ grid.forEach((row, rowIndex) => {
       tile.style.backgroundColor = "gray";
     }
 
-    tile.onmouseenter = () => {
-      if (mouseDown) {
-        addObstacle(rowIndex, itemindex);
-      }
-    };
-    tile.onmousedown = () => addObstacle(rowIndex, itemindex);
+    tile.x = rowIndex;
+    tile.y = itemindex;
 
     thisRow.push(tile);
     rowElement.appendChild(tile);
   });
 });
 
-let start = { x: 5, y: 13 };
-let end = { x: 0, y: 0 };
-
-
-
+let start = { x: 8, y: 10 };
+let target = { x: 0, y: 0 };
 
 paintStartAndTarget();
 document.getElementById("start-btn").onclick = () => {
@@ -74,7 +73,7 @@ document.getElementById("delete-obstacles-btn").onclick = () => {
 
 // START
 function paintPath() {
-  let path = aStar.search(grid, start, end, true);
+  let path = aStar.search(grid, start, target, true);
   console.log(path);
 
   if (path.length == 0) {
@@ -83,7 +82,7 @@ function paintPath() {
   }
   let paintTile = () => {
     if (path.length != 1) {
-      elements[path[0].x][path[0].y].style.backgroundColor = "lightblue";
+      tiles[path[0].x][path[0].y].style.backgroundColor = "lightblue";
     }
     path.shift();
     if (path.length == 0) {
@@ -93,39 +92,77 @@ function paintPath() {
   let intervalId = setInterval(paintTile, 100);
 }
 
+function selectNewStart() {
+  tiles[start.x][start.y].style.backgroundColor = backgroundFill;
+  forAllTiles(tile => {
+    tile.onmousedown = () => {
+      console.log("New start tile selected");
+      tile.style.backgroundColor = "green";
+      start.x = tile.x;
+      start.y = tile.y;
 
+      addTileBehavior();
+    };
+  });
+}
+
+function selectNewTarget() {
+  tiles[target.x][target.y].style.backgroundColor = backgroundFill;
+  forAllTiles(tile => {
+    tile.onmousedown = () => {
+      console.log("New target tile selected");
+      tile.style.backgroundColor = "gold";
+      target.x = tile.x;
+      target.y = tile.y;
+
+      addTileBehavior();
+    };
+  });
+}
+
+function addTileBehavior() {
+  forAllTiles(tile => {
+    tile.onmousedown = () => addObstacle(tile.x, tile.y);
+  });
+  tiles[start.x][start.y].onmousedown = selectNewStart;
+  tiles[target.x][target.y].onmousedown = selectNewTarget;
+}
 
 function paintStartAndTarget() {
-  elements[start.x][start.y].style.backgroundColor = "green";
-  elements[end.x][end.y].style.backgroundColor = "gold";
+  tiles[start.x][start.y].style.backgroundColor = "green";
+  tiles[target.x][target.y].style.backgroundColor = "gold";
 }
 
 function clearPath() {
-  elements.forEach(row => {
-    row.forEach(element => {
-      if (element.style.backgroundColor == "lightblue") {
-        element.style.backgroundColor = "white";
-      }
-    });
+  forAllTiles(tile => {
+    if (tile.style.backgroundColor == "lightblue") {
+      tile.style.backgroundColor = backgroundFill;
+    }
   });
 }
 
 function clearObstacles() {
-  
   grid.forEach((row, rowIndex) => {
     row.forEach((item, i) => {
       grid[rowIndex][i] = 0;
     });
   });
 
-  // visualmente
-  elements.forEach(row => {
-    row.forEach(element => {
-      if (element.style.backgroundColor == "gray") {
-        element.style.backgroundColor = "white";
-      }
-    });
+  forAllTiles(tile => {
+    if (tile.style.backgroundColor == "gray") {
+      tile.style.backgroundColor = backgroundFill;
+    }
   });
 
   clearPath();
 }
+
+function forAllTiles(callback) {
+  tiles.forEach(row => {
+    row.forEach(element => {
+      callback(element);
+    });
+  });
+}
+
+addTileBehavior();
