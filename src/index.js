@@ -4,19 +4,25 @@ const aStar = new AStar();
 const backgroundFill = "#f1f1f1";
 
 let grid = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
+
+let start = { x: 8, y: 14 };
+let target = { x: 0, y: 0 };
+
+
 let addObstacle = (x, y) => {
+  clearPath();
   if (grid[x][y] == 1) {
     grid[x][y] = 0;
     tiles[x][y].style.backgroundColor = backgroundFill;
@@ -58,9 +64,6 @@ grid.forEach((row, rowIndex) => {
   });
 });
 
-let start = { x: 8, y: 10 };
-let target = { x: 0, y: 0 };
-
 paintStartAndTarget();
 document.getElementById("start-btn").onclick = () => {
   clearPath();
@@ -93,6 +96,7 @@ function paintPath() {
 }
 
 function selectNewStart() {
+  clearPath();
   tiles[start.x][start.y].style.backgroundColor = backgroundFill;
   forAllTiles(tile => {
     tile.onmousedown = () => {
@@ -107,6 +111,7 @@ function selectNewStart() {
 }
 
 function selectNewTarget() {
+  clearPath();
   tiles[target.x][target.y].style.backgroundColor = backgroundFill;
   forAllTiles(tile => {
     tile.onmousedown = () => {
