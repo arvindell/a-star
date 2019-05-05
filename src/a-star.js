@@ -25,7 +25,7 @@ export default class AStar {
     let startNode = nodes[start.x][start.y];
     let targetNode = nodes[target.x][target.y];
 
-    heuristic = Heuristics.manhattan;
+    heuristic = Heuristics.euclidean;
 
     let openList = [];
     openList.push(startNode);
@@ -60,9 +60,9 @@ export default class AStar {
           return;
         }
 
-        var gScore =
+        let gScore =
           currentNode.g + (this.isDiagonal(child, currentNode) ? 2 : 1);
-        var gIsBetter = false;
+        let gIsBetter = false;
 
         if (!child.visited) {
           child.visited = true;

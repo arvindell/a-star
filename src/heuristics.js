@@ -9,4 +9,8 @@ export default class Heuristics {
     return Math.pow(node1.x - node2.x, 2) + Math.pow(node1.y - node2.y, 2);
   }
 
+  static zero() {
+    return 0;
+  }
+
 }
