@@ -1,7 +1,7 @@
 import Heuristics from "./heuristics";
 
 export default class AStar {
-  search(grid, start, target, heuristic) {
+  search(grid, start, target, heuristic, gToBeSet) {
     let search = [];
 
     // Crear objetos nodos a partir de arreglo
@@ -10,22 +10,20 @@ export default class AStar {
       nodes[x] = [];
       for (let y = 0; y < grid[x].length; y++) {
         nodes[x][y] = {
+          x,
+          y,
           isObstacle: grid[x][y] === 1,
           visited: false,
           closed: false,
           g: 0,
           h: 0,
-          f: 0,
-          x,
-          y
+          f: 0
         };
       }
     }
 
     let startNode = nodes[start.x][start.y];
     let targetNode = nodes[target.x][target.y];
-
-    heuristic = Heuristics.euclidean;
 
     let openList = [];
     openList.push(startNode);
@@ -54,14 +52,22 @@ export default class AStar {
       }
 
       let children = this.getChildren(nodes, currentNode);
+      console.log("children at " + currentNode.x + "," + currentNode.y);
+      console.log(children);
       children.forEach(child => {
         if (child.closed || child.isObstacle) {
           // saltar al siguiente hijo
           return;
         }
 
-        let gScore =
-          currentNode.g + (this.isDiagonal(child, currentNode) ? 2 : 1);
+        let gScore;
+        if (gToBeSet === null) {
+          gScore =
+            currentNode.g + (this.isDiagonal(child, currentNode) ? 2 : 1);
+        } else {
+          gScore = gToBeSet;
+        }
+
         let gIsBetter = false;
 
         if (!child.visited) {

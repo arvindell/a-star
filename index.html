@@ -20,6 +20,25 @@
 
         <button id="start-btn">Iniciar</button>
         <button id="delete-obstacles-btn">Borrar obstáculos</button>
+
+        <div class="dropdown">
+            <button id="dropdown-btn" class="dropbtn">Heurística</button>
+            <div id="heuristic-dropdown" class="dropdown-content">
+                <a id="manhattan-btn">Manhattan</a>
+                <a id="euclidean-btn">Euclidiana</a>
+                <a id="zero-h-btn">Cero</a>
+            </div>
+
+        </div>
+
+        <div class="dropdown">
+            <button id="g-dropdown-btn" class="dropbtn">G</button>
+            <div id="g-dropdown" class="dropdown-content">
+                <a id="normal-g-btn">Recorrido</a>
+                <a id="one-g-btn">1</a>
+                <a id="zero-g-btn">0</a>
+            </div>
+        </div>
     </div>
 
     <script src="build/app.bundle.js"></script>

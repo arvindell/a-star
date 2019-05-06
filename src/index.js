@@ -1,4 +1,5 @@
 import AStar from "./a-star";
+import Heuristics from "./heuristics";
 const aStar = new AStar();
 
 const backgroundFill = "#f1f1f1";
@@ -22,6 +23,10 @@ let grid = [
 
 let start = { x: 9, y: 3 };
 let target = { x: 0, y: 12 };
+
+let heuristic = Heuristics.manhattan;
+
+let gFunction = null;
 
 let addObstacle = (x, y) => {
   clearPath();
@@ -66,9 +71,10 @@ grid.forEach((row, rowIndex) => {
   });
 });
 
-// START
 function paintSearch() {
-  let result = aStar.search(grid, start, target, true);
+  console.log(`heuristic: ${heuristic}`);
+  console.log(`g: ${gFunction}`);
+  let result = aStar.search(grid, start, target, heuristic, gFunction);
   let { search, path } = result;
 
   if (search.length == 0) {
@@ -89,6 +95,7 @@ function paintSearch() {
       // detener interval
       clearInterval(intervalId);
       paintPath(path);
+
     }
   };
   let intervalId = setInterval(paintSearchTile, 50);
@@ -194,6 +201,55 @@ document.getElementById("start-btn").onclick = () => {
 
 document.getElementById("delete-obstacles-btn").onclick = () => {
   clearObstacles();
+};
+
+document.getElementById("dropdown-btn").onclick = () => {
+  document.getElementById("heuristic-dropdown").classList.toggle("show");
+};
+
+document.getElementById("euclidean-btn").onclick = () => {
+  heuristic = Heuristics.euclidean;
+};
+
+document.getElementById("manhattan-btn").onclick = () => {
+  heuristic = Heuristics.manhattan;
+};
+
+document.getElementById("zero-h-btn").onclick = () => {
+  heuristic = Heuristics.zero;
+};
+
+document.getElementById("g-dropdown-btn").onclick = () => {
+  document.getElementById("g-dropdown").classList.toggle("show");
+};
+
+document.getElementById("normal-g-btn").onclick = () => {
+  gFunction = null;
+  console.log(gFunction);
+};
+
+document.getElementById("one-g-btn").onclick = () => {
+  gFunction = 1;
+  console.log(gFunction);
+};
+
+document.getElementById("zero-g-btn").onclick = () => {
+  gFunction = 0;
+  console.log(gFunction);
+};
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches(".dropbtn")) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains("show")) {
+        openDropdown.classList.remove("show");
+      }
+    }
+  }
 };
 
 addTileBehavior();

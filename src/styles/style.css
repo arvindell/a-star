@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,400,500,700|Ropa+Sans");
 
+html {
+  font-family: "Roboto", sans-serif
+}
+
 body {
     background-color: #f1f1f1;
 }
@@ -67,3 +71,48 @@ button:hover {
   font-size: 9px;
   margin: auto;
 }
+
+
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: #3498DB;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  text-align: left;
+  border-radius: 5%;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 5px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
