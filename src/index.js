@@ -239,7 +239,7 @@ document.getElementById("dropdown-btn").onclick = () => {
 
 document.getElementById("euclidean-btn").onclick = () => {
   heuristic = Heuristics.euclidean;
-  document.getElementById("dropdown-btn").innerHTML = "Euclideana";
+  document.getElementById("dropdown-btn").innerHTML = "Euclidiana";
 };
 
 document.getElementById("manhattan-btn").onclick = () => {
