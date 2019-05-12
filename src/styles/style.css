@@ -72,7 +72,6 @@ button:hover {
   outline: none;
 }
 
-
 *:focus {
   outline: none;
 }
@@ -140,5 +139,3 @@ button:hover {
 .show {
   display: block;
 }
-
-
