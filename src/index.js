@@ -9,20 +9,20 @@ const startColor = "green";
 const pathColor = "cornflowerblue";
 
 let grid = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+  [0, 0, 0, 0, 1, 1, 1, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 let start = { x: 9, y: 3 };
-let target = { x: 0, y: 12 };
+let target = { x: 0, y: 7 };
 
 let heuristic = Heuristics.manhattan;
 
@@ -95,7 +95,6 @@ function paintSearch() {
       // detener interval
       clearInterval(intervalId);
       paintPath(path);
-
     }
   };
   let intervalId = setInterval(paintSearchTile, 50);
@@ -107,8 +106,7 @@ function paintPath(path) {
     tiles[element.x][element.y].style.backgroundColor = pathColor;
     let text = document.createElement("p");
     text.className = "innerText";
-    text.innerHTML =
-      "g:" + element.g + "<br/> f: " + element.f + "<br/> h: " + element.h;
+    text.innerHTML = element.g;
     tiles[element.x][element.y].appendChild(text);
   });
   console.log(path);
@@ -209,14 +207,17 @@ document.getElementById("dropdown-btn").onclick = () => {
 
 document.getElementById("euclidean-btn").onclick = () => {
   heuristic = Heuristics.euclidean;
+  document.getElementById("dropdown-btn").innerHTML = "Euclideana";
 };
 
 document.getElementById("manhattan-btn").onclick = () => {
   heuristic = Heuristics.manhattan;
+  document.getElementById("dropdown-btn").innerHTML = "Manhattan";
 };
 
 document.getElementById("zero-h-btn").onclick = () => {
   heuristic = Heuristics.zero;
+  document.getElementById("dropdown-btn").innerHTML = "Sin heurística";
 };
 
 document.getElementById("g-dropdown-btn").onclick = () => {
@@ -225,17 +226,17 @@ document.getElementById("g-dropdown-btn").onclick = () => {
 
 document.getElementById("normal-g-btn").onclick = () => {
   gFunction = null;
-  console.log(gFunction);
+  document.getElementById("g-dropdown-btn").innerHTML = "Recorrido";
 };
 
 document.getElementById("one-g-btn").onclick = () => {
   gFunction = 1;
-  console.log(gFunction);
+  document.getElementById("g-dropdown-btn").innerHTML = "G: 1";
 };
 
 document.getElementById("zero-g-btn").onclick = () => {
   gFunction = 0;
-  console.log(gFunction);
+  document.getElementById("g-dropdown-btn").innerHTML = "G: 0";
 };
 
 // Close the dropdown menu if the user clicks outside of it

@@ -1,5 +1,3 @@
-import Heuristics from "./heuristics";
-
 export default class AStar {
   search(grid, start, target, heuristic, gToBeSet) {
     let search = [];
