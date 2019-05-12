@@ -28,8 +28,10 @@ let heuristic = Heuristics.manhattan;
 
 let gFunction = null;
 
+let intervalId;
+
 let addObstacle = (x, y) => {
-  clearPath();
+  halt();
   if (grid[x][y] == 1) {
     grid[x][y] = 0;
     tiles[x][y].style.backgroundColor = backgroundFill;
@@ -97,7 +99,7 @@ function paintSearch() {
       paintPath(path);
     }
   };
-  let intervalId = setInterval(paintSearchTile, 50);
+  intervalId = setInterval(paintSearchTile, 50);
 }
 
 function paintPath(path) {
@@ -167,7 +169,7 @@ function clearPath() {
   });
 }
 
-function clearObstacles() {
+function clearGrid() {
   grid.forEach((row, rowIndex) => {
     row.forEach((item, i) => {
       grid[rowIndex][i] = 0;
@@ -191,14 +193,20 @@ function forAllTiles(callback) {
   });
 }
 
+function halt() {
+  clearInterval(intervalId);
+  clearPath();
+}
+
 paintStartAndTarget();
 document.getElementById("start-btn").onclick = () => {
-  clearPath();
+  halt();
   paintSearch();
 };
 
 document.getElementById("delete-obstacles-btn").onclick = () => {
-  clearObstacles();
+  halt();
+  clearGrid();
 };
 
 document.getElementById("dropdown-btn").onclick = () => {

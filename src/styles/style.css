@@ -72,6 +72,11 @@ button:hover {
   outline: none;
 }
 
+
+*:focus {
+  outline: none;
+}
+
 .tile:hover {
   border-color: rgb(63, 63, 63);
   transition: 0.1s;
